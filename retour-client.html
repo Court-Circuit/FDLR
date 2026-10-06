@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Fromages de la Réunion</title>
+    <meta name="description" content="Des fromages fabriqués à La Réunion à partir de lait frais issu de notre production laitière locale.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <!-- Fonts : Typekit Client (Futura) -->
+    <link rel="stylesheet" href="https://use.typekit.net/tod4mwq.css">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        encre: '#17231C',
+                        lait: '#FFFDF7',
+                        or: '#E6B33D',
+                        vertfonce: '#1F6048',
+                        vertfeuille: '#82B65A',
+                        piment: '#C54232',
+                        lagon: '#3178B8',
+                        creme: '#F4EAD6',
+                        brune: '#D8D7CC',
+                        orprofond: '#8A5700',
+                    },
+                    fontFamily: {
+                        sans: ['futura-pt', 'Futura', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'newsletter': '0 25px 50px -12px rgba(23, 35, 28, 0.1)',
+                        'btn-circulaire': '0 10px 15px -3px rgba(230, 179, 61, 0.4)',
+                        'hover-elegant': '0 15px 35px -5px rgba(23, 35, 28, 0.15)',
+                        'header-scroll': '0 4px 20px -2px rgba(23, 35, 28, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS pour l'UX et la typographie -->
+    <style>
+        body {
+            background-color: theme('colors.lait');
+            color: theme('colors.encre');
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Variables d'animation via Courbe de Bézier pour un rendu très fluide (Ease-out-quart) */
+        :root {
+            --bezier-fluide: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* SPA Transitions avec Bézier */
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s var(--bezier-fluide);
+        }
+        .page.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.6s var(--bezier-fluide) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hiérarchie typographique demandée */
+        .titre-massif {
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: -0.01em;
+        }
+        
+        .accroche {
+            font-weight: 600;
+            font-size: 1.125rem;
+            line-height: 1.5;
+        }
+
+        .texte-courant {
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* Overlay d'assombrissement */
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(23,35,28,0.2) 0%, rgba(23,35,28,0.7) 100%);
+        }
+
+        a { -webkit-tap-highlight-color: transparent; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: theme('colors.lait'); }
+        ::-webkit-scrollbar-thumb { background: theme('colors.brune'); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: theme('colors.or'); }
+
+        /* Effets interactifs élégants */
+        .hover-interactif {
+            transition: all 0.5s var(--bezier-fluide);
+        }
+        .hover-interactif:hover {
+            transform: translateY(-4px);
+            box-shadow: theme('boxShadow.hover-elegant');
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen font-sans">
+
+    <!-- Top Bar -->
+    <div class="bg-or text-white text-xs font-bold py-2 text-center uppercase tracking-widest">
+        Une fabrication traditionnelle 100% Réunionnaise
+    </div>
+
+    <!-- Main Navigation -->
+    <header id="main-header" class="bg-lait sticky top-0 z-50 transition-shadow duration-500" style="transition-timing-function: var(--bezier-fluide);">
+        <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20">
+            <div class="flex justify-between h-20 items-center relative">
+                
+                <!-- Logo -->
+                <div class="absolute left-4 md:left-10 lg:left-20 top-2 z-50 cursor-pointer nav-link flex flex-col items-center" data-target="accueil">
+                    <div class="w-32 h-32 flex items-center justify-center relative hover-interactif">
+                        <img src="assets/logo.png" alt="Les Fromages de la Réunion" class="w-full h-full object-contain" onerror="this.style.display='none'">
+                    </div>
+                </div>
+                
+                <div class="w-40 hidden md:block"></div>
+                
+                <nav class="hidden md:flex space-x-10 font-bold text-base text-encre ml-4">
+                    <a href="#" class="hover:text-or transition-colors duration-300 nav-link" data-target="accueil">Accueil</a>
+                    <a href="#" class="hover:text-or transition-colors duration-300 nav-link" data-target="savoir-faire">Nos savoir-faire</a>
+                    <a href="#" class="hover:text-or transition-colors duration-300 nav-link" data-target="fromages">Nos fromages</a>
+                    <a href="#" class="hover:text-or transition-colors duration-300 nav-link" data-target="inspiration">Nos inspirations</a>
+                    <a href="#" class="hover:text-or transition-colors duration-300 nav-link" data-target="contact">FAQ & Contact</a>
+                </nav>
+
+                <div class="hidden md:flex items-center">
+                    <a href="https://www.instagram.com/fromagesdelareunion/" target="_blank" rel="noopener noreferrer" class="bg-or text-white hover:bg-orprofond font-bold flex items-center gap-2 px-6 py-2.5 rounded-full hover-interactif">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        Instagram
+                    </a>
+                </div>
+
+                <div class="flex items-center md:hidden ml-auto">
+                    <button type="button" id="mobile-menu-btn" class="text-encre hover:text-or p-2 bg-creme rounded-full transition-colors duration-300">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="md:hidden hidden bg-lait border-t border-brune absolute w-full shadow-lg">
+            <div class="px-6 py-6 space-y-6 flex flex-col font-bold text-lg text-center">
+                <a href="#" class="block text-encre hover:text-or transition-colors duration-300 nav-link" data-target="accueil">Accueil</a>
+                <a href="#" class="block text-encre hover:text-or transition-colors duration-300 nav-link" data-target="savoir-faire">Nos savoir-faire</a>
+                <a href="#" class="block text-encre hover:text-or transition-colors duration-300 nav-link" data-target="fromages">Nos fromages</a>
+                <a href="#" class="block text-encre hover:text-or transition-colors duration-300 nav-link" data-target="inspiration">Nos inspirations</a>
+                <a href="#" class="block text-encre hover:text-or transition-colors duration-300 nav-link" data-target="contact">FAQ & Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <!-- PAGE ACCUEIL -->
+        <section id="accueil" class="page active">
+            
+            <div class="relative w-full h-[85vh] bg-brune overflow-hidden">
+                <img src="assets/accueil-hero-plateau.jpg" alt="Plateau de fromage" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                <div class="absolute inset-0 hero-overlay"></div>
+                
+                <div class="absolute inset-0 flex flex-col justify-end pb-20 px-4 md:px-10 lg:px-20 max-w-[1520px] mx-auto">
+                    <div class="max-w-3xl">
+                        <h1 class="titre-massif text-6xl md:text-7xl lg:text-[5.5rem] text-white mb-8">Le goût de<br/>La Réunion,<br/>à partager.</h1>
+                        <p class="accroche text-white/90 mb-10 max-w-xl">Des fromages fabriqués à La Réunion à partir de lait frais issu de notre production laitière locale.</p>
+                        <button class="bg-or text-white px-8 py-4 rounded-full font-bold text-lg inline-block nav-link hover-interactif" data-target="fromages">
+                            Nos fromages
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="py-20 lg:py-[120px] max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20">
+                <div class="flex flex-col md:flex-row gap-20 items-center">
+                    <div class="md:w-5/12 w-full">
+                        <div class="relative w-full aspect-[4/5] bg-creme rounded-2xl overflow-hidden hover-interactif">
+                            <img src="assets/accueil-histoire.jpg" alt="Fabrication locale" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                    <div class="md:w-7/12 w-full">
+                        <h2 class="titre-massif text-5xl md:text-6xl text-encre mb-8">Du lait frais au fromage, une histoire 100 % péi.</h2>
+                        <p class="accroche text-encre mb-6">Derrière chaque fromage, il y a le lait frais, le savoir-faire de nos équipes et le travail de nos éleveurs.</p>
+                        <p class="texte-courant text-encre/80 mb-10 text-lg">Une production locale qui fait vivre une filière et donne naissance à des fromages qui ont le goût de notre île.</p>
+                        <button class="text-encre font-bold text-lg flex items-center gap-3 hover:gap-4 transition-all duration-300 nav-link" data-target="savoir-faire">
+                            Notre savoir-faire <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="py-20 lg:py-[120px] bg-lait">
+                <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                        <h2 class="titre-massif text-5xl md:text-6xl text-encre max-w-2xl">À chacun son fromage</h2>
+                        <button class="text-encre font-bold text-lg flex items-center gap-3 hover:gap-4 transition-all duration-300 pb-2 nav-link" data-target="fromages">
+                            Tous nos fromages <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <div class="bg-creme rounded-2xl p-10 flex flex-col h-full cursor-pointer nav-link group hover-interactif" data-target="fromages">
+                            <span class="text-orprofond font-bold text-sm uppercase tracking-wider mb-8 block">Pâte pressée</span>
+                            <div class="flex-grow flex items-center justify-center mb-10 relative pt-4">
+                                <div class="absolute w-44 h-44 rounded-full bg-vertfeuille group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);"></div>
+                                <img src="assets/produit-piton-maido.png" alt="Piton Maïdo" class="relative z-10 w-56 h-56 object-contain drop-shadow-xl group-hover:-translate-y-2 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                            </div>
+                            <h3 class="titre-massif text-4xl text-encre mb-2">Piton Maïdo</h3>
+                            <p class="text-encre/80 mb-8 font-medium">Meule 500g</p>
+                            <div class="text-encre font-bold flex items-center gap-2 mt-auto group-hover:gap-3 transition-all duration-300">Découvrir <i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                        </div>
+
+                        <div class="bg-creme rounded-2xl p-10 flex flex-col h-full cursor-pointer nav-link group hover-interactif" data-target="fromages">
+                            <span class="text-orprofond font-bold text-sm uppercase tracking-wider mb-8 block">Pâte molle</span>
+                            <div class="flex-grow flex items-center justify-center mb-10 relative pt-4">
+                                <div class="absolute w-44 h-44 rounded-full bg-or group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);"></div>
+                                <img src="assets/produit-piton-neiges.png" alt="Piton des Neiges" class="relative z-10 w-56 h-56 object-contain drop-shadow-xl group-hover:-translate-y-2 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                            </div>
+                            <h3 class="titre-massif text-4xl text-encre mb-2">Piton des Neiges</h3>
+                            <p class="text-encre/80 mb-8 font-medium text-lg">Cœur des hauts</p>
+                            <div class="text-encre font-bold flex items-center gap-2 mt-auto group-hover:gap-3 transition-all duration-300">Découvrir <i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                        </div>
+
+                        <div class="bg-creme rounded-2xl p-10 flex flex-col h-full cursor-pointer nav-link group hover-interactif" data-target="fromages">
+                            <span class="text-orprofond font-bold text-sm uppercase tracking-wider mb-8 block">Frais</span>
+                            <div class="flex-grow flex items-center justify-center mb-10 relative pt-4">
+                                <div class="absolute w-44 h-44 rounded-full bg-lagon group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);"></div>
+                                <img src="assets/produit-tifrais.png" alt="Ti'Frais" class="relative z-10 w-56 h-56 object-contain drop-shadow-xl group-hover:-translate-y-2 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                            </div>
+                            <h3 class="titre-massif text-4xl text-encre mb-4">Ti'Frais</h3>
+                            <p class="text-encre/80 mb-8 font-medium text-lg">Idéal Apéritif & Tartine</p>
+                            <div class="text-encre font-bold flex items-center gap-2 mt-auto group-hover:gap-3 transition-all duration-300">Découvrir <i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative w-full py-20 lg:py-[120px] bg-or overflow-hidden">
+                <div class="relative z-10 max-w-[880px] mx-auto px-4 md:px-10 text-center">
+                    <h2 class="titre-massif text-5xl md:text-[5rem] text-lait mb-10">Fabriqués ici.<br/>Partagés ici.<br/>Aimés ici.</h2>
+                    <p class="accroche text-lait/90">
+                        Il y a près de 30 ans, Les Fromages de La Réunion sont nés d'une volonté simple : faire vivre une filière laitière locale et proposer des fromages qui trouvent naturellement leur place sur les tables réunionnaises.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE SAVOIR-FAIRE -->
+        <section id="savoir-faire" class="page bg-lait">
+            
+            <div class="relative py-20 lg:py-[120px] bg-encre text-center px-4 overflow-hidden">
+                <img src="assets/savoirfaire-hero.jpg" alt="Le savoir-faire réunionnais" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                <div class="absolute inset-0 hero-overlay"></div>
+                <div class="max-w-[1040px] mx-auto relative z-10">
+                    <h1 class="titre-massif text-6xl md:text-[5.5rem] text-white mb-8">Le savoir-faire<br/>réunionnais en héritage</h1>
+                    <p class="accroche text-white/80">Du lait frais au fromage.</p>
+                </div>
+            </div>
+
+            <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20 pt-20 lg:pt-[120px] pb-10 space-y-20 lg:space-y-[120px]">
+                <div class="flex flex-col md:flex-row items-center gap-20">
+                    <div class="md:w-1/2">
+                        <span class="text-orprofond font-bold text-sm tracking-widest uppercase mb-6 block">1 - Nos éleveurs</span>
+                        <h2 class="titre-massif text-4xl md:text-6xl text-encre mb-8">Tout commence dans les élevages réunionnais.</h2>
+                        <p class="texte-courant text-encre/90 mb-6 text-xl">Chaque Fromage de La Réunion raconte une histoire. Celle d'un lait frais produit dans les Hauts de l’île grâce à des hommes et des femmes engagés.</p>
+                        <p class="texte-courant text-encre/90 text-lg">Chaque jour, leur travail contribue à faire vivre une filière locale et permet de transformer une matière première produite sur notre île en fromages fabriqués ici.</p>
+                    </div>
+                    <div class="md:w-1/2 w-full">
+                        <div class="relative w-full aspect-[4/3] bg-brune rounded-2xl overflow-hidden hover-interactif">
+                            <img src="assets/savoirfaire-eleveurs.jpeg" alt="Éleveurs" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row-reverse items-center gap-20">
+                    <div class="md:w-1/2">
+                        <span class="text-orprofond font-bold text-sm tracking-widest uppercase mb-6 block">2 - Le lait frais</span>
+                        <h2 class="titre-massif text-4xl md:text-6xl text-encre mb-8">Du lait frais, rien de plus essentiel.</h2>
+                        <p class="texte-courant text-encre/90 mb-6 text-xl">La qualité d'un fromage commence par celle de son lait. Collecté à La Réunion, le lait frais est acheminé vers notre fromagerie pour être transformé localement par nos équipes.</p>
+                        <p class="texte-courant text-encre/90 mb-10 text-lg">De la collecte à la transformation, chaque étape est maîtrisée avec la même exigence : préserver les qualités du lait et révéler tout son potentiel.</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 pt-8 border-t border-brune">
+                            <div>
+                                <span class="titre-massif text-5xl text-or block mb-2">XX</span>
+                                <span class="text-xs font-bold text-encre uppercase tracking-wider">Éleveurs<br/>partenaires</span>
+                            </div>
+                            <div>
+                                <span class="titre-massif text-5xl text-or block mb-2">3,2M</span>
+                                <span class="text-xs font-bold text-encre uppercase tracking-wider">Litres collectés<br/>par an</span>
+                            </div>
+                            <div>
+                                <span class="titre-massif text-5xl text-or block mb-2">350T</span>
+                                <span class="text-xs font-bold text-encre uppercase tracking-wider">De fromages<br/>par an</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 w-full">
+                        <div class="relative w-full aspect-[4/3] bg-creme rounded-2xl overflow-hidden hover-interactif">
+                            <img src="assets/savoirfaire-lait.jpg" alt="Lait frais" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-creme rounded-2xl p-10 md:p-20 hover-interactif">
+                    <span class="text-orprofond font-bold text-sm tracking-widest uppercase mb-6 block">3 - La fabrication</span>
+                    <h2 class="titre-massif text-4xl md:text-6xl mb-16 text-encre">Les étapes qui donnent vie à nos fromages.</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-20">
+                        <div>
+                            <h3 class="titre-massif text-3xl text-encre mb-6">Collecter</h3>
+                            <p class="font-bold text-encre text-xl mb-4">Un lait frais produit à La Réunion</p>
+                            <p class="texte-courant text-encre/80">Le lait est collecté auprès de nos éleveurs réunionnais avant d'être acheminé vers la fromagerie.</p>
+                        </div>
+                        <div>
+                            <h3 class="titre-massif text-3xl text-encre mb-6">Transformer</h3>
+                            <p class="font-bold text-encre text-xl mb-4">Le savoir-faire fromager</p>
+                            <p class="texte-courant text-encre/80">Nos équipes, basées à l’atelier de Saint-Pierre, transforment le lait en fromages. Moulage, affinage, égouttage, saumurage…</p>
+                        </div>
+                        <div>
+                            <h3 class="titre-massif text-3xl text-encre mb-6">Conditionner</h3>
+                            <p class="font-bold text-encre text-xl mb-4">Prêt à rejoindre les tables</p>
+                            <p class="texte-courant text-encre/80">Une fois arrivé à maturité, chaque fromage est conditionné avec soin avant de rejoindre les rayons et les tables de La Réunion.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="bg-brune/30 p-10 lg:p-20 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <span class="text-orprofond font-bold text-sm tracking-widest uppercase mb-6 block">4 - Nos équipes</span>
+                            <h2 class="titre-massif text-4xl text-encre mb-8">Derrière chaque fromage, des femmes et des hommes.</h2>
+                            <p class="texte-courant text-encre/90 text-lg mb-10">De la collecte du lait à l'affinage, chaque étape repose sur des gestes, un savoir-faire et une attention particulière. Nos équipes mettent leur expertise au service d'un objectif commun : proposer des fromages fabriqués à La Réunion, avec le même niveau d'exigence jour après jour.</p>
+                        </div>
+                        <div class="relative w-full aspect-[16/9] bg-brune rounded-2xl overflow-hidden hover-interactif">
+                            <img src="assets/savoirfaire-equipes.jpg" alt="Nos équipes" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                    <div class="bg-brune/30 p-10 lg:p-20 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <span class="text-orprofond font-bold text-sm tracking-widest uppercase mb-6 block">5 - Le territoire</span>
+                            <h2 class="titre-massif text-4xl text-encre mb-8">Un savoir-faire d'ici, pour des fromages d'ici.</h2>
+                            <p class="texte-courant text-encre/90 text-lg mb-10">Fabriquer du fromage à La Réunion, c'est aussi composer avec un territoire, un climat et une histoire particulière. Notre savoir-faire s'est développé ici depuis 1997, pour proposer une gamme qui trouve naturellement sa place sur les tables de l'île.</p>
+                        </div>
+                        <div class="relative w-full aspect-[16/9] bg-creme rounded-2xl overflow-hidden hover-interactif">
+                            <img src="assets/savoirfaire-territoire.jpg" alt="Le territoire" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION PARALLAX NOTRE PASSION -->
+            <div class="relative w-full h-screen flex items-center justify-center my-20 lg:my-[120px] overflow-hidden">
+                <img src="assets/savoirfaire-passion.jpg" alt="Notre passion" data-parallax class="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-0 will-change-transform" onerror="this.style.display='none'">
+                <div class="absolute inset-0 bg-black/30 z-10"></div> 
+                <h2 class="relative z-20 titre-massif text-6xl md:text-[8rem] text-white text-center tracking-wide drop-shadow-2xl">
+                    Notre passion
+                </h2>
+            </div>
+
+            <!-- Reprise du conteneur -->
+            <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20 py-20 lg:py-[120px]">
+                <div class="text-center max-w-[1040px] mx-auto space-y-20 lg:space-y-[120px]">
+                    <div>
+                        <span class="text-orprofond font-bold text-sm tracking-widest uppercase mb-6 block">6 - Les produits</span>
+                        <h2 class="titre-massif text-5xl text-encre mb-8">Et tout ce savoir-faire donne naissance à...</h2>
+                        <div class="relative w-full aspect-[21/9] bg-creme rounded-2xl overflow-hidden mb-12 hover-interactif">
+                            <img src="assets/savoirfaire-gamme.jpg" alt="La gamme" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                        </div>
+                        <p class="texte-courant text-encre/90 text-xl mb-10">Fromages frais, pâtes molles, pâtes dures… Découvrez les fromages fabriqués à La Réunion et trouvez celui qui vous fera fondre.</p>
+                        <button class="bg-or text-white px-10 py-4 rounded-full font-bold text-lg inline-block nav-link hover-interactif" data-target="fromages">
+                            Découvrir la gamme
+                        </button>
+                    </div>
+
+                    <div class="border-t border-brune pt-20 lg:pt-[120px] pb-10">
+                        <span class="text-orprofond font-bold text-sm tracking-widest uppercase mb-6 block">7 - CILAM</span>
+                        <h2 class="titre-massif text-5xl text-encre mb-8">Un savoir-faire porté par le Groupe CILAM.</h2>
+                        <p class="texte-courant text-encre/90 text-xl mb-12">Depuis plus de 60 ans le Groupe CILAM contribue au développement de la filière laitière réunionnaise, à la production locale, au soutien de l’économie et à la souveraineté alimentaire de l’île.</p>
+                        <a href="https://cilam-agro.re/" target="_blank" rel="noopener noreferrer" class="text-encre font-bold text-lg flex items-center justify-center gap-3 hover:gap-4 transition-all duration-300">
+                            En savoir plus sur le Groupe CILAM <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE NOS FROMAGES -->
+        <section id="fromages" class="page bg-lait">
+            <div class="relative py-20 lg:py-[120px] bg-encre text-center px-4 overflow-hidden">
+                <img src="assets/fromages-hero.jpg" alt="Tous nos fromages" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                <div class="absolute inset-0 hero-overlay"></div>
+                <div class="max-w-[1040px] mx-auto relative z-10">
+                    <h1 class="titre-massif text-6xl md:text-[5.5rem] text-white mb-8">Tous nos fromages,<br/>à vous de choisir.</h1>
+                    <p class="accroche text-white/80 max-w-3xl mx-auto">Du plus doux au plus typé, du fromage frais au fromage à faire fondre, découvrez les Fromages de La Réunion et trouvez celui qui vous ressemble.</p>
+                </div>
+            </div>
+
+            <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20 py-20 lg:py-[120px]">
+                <div class="flex flex-col lg:flex-row gap-20">
+                    <aside class="lg:w-1/4">
+                        <div class="sticky top-32">
+                            <h3 class="titre-massif text-3xl text-encre mb-10">Trouver mon fromage</h3>
+                            <div class="space-y-12">
+                                <div>
+                                    <h4 class="font-bold text-orprofond uppercase tracking-wider text-xs mb-6">Type</h4>
+                                    <div class="flex flex-col space-y-4">
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Frais</label>
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Pâte molle</label>
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Pâte dure</label>
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Raclette</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-orprofond uppercase tracking-wider text-xs mb-6">Goût</h4>
+                                    <div class="flex flex-col space-y-4">
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Doux</label>
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Équilibré</label>
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Caractère</label>
+                                        <label class="flex items-center gap-4 cursor-pointer font-medium text-lg text-encre hover:text-or transition-colors duration-300"><input type="checkbox" class="w-5 h-5 accent-or"> Intense</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <div class="lg:w-3/4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            
+                            <!-- Card 1 -->
+                            <div class="bg-creme rounded-2xl p-10 flex flex-col cursor-pointer group hover:bg-[#EFE4CC] hover-interactif">
+                                <span class="text-orprofond font-bold text-xs uppercase tracking-wider mb-8 block">Pâte pressée • Équilibré</span>
+                                <div class="flex-grow flex items-center justify-center mb-10 relative pt-4">
+                                    <div class="absolute w-44 h-44 rounded-full bg-vertfeuille group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);"></div>
+                                    <img src="assets/produit-piton-maido.png" alt="Piton Maïdo" class="relative z-10 w-56 h-56 object-contain drop-shadow-xl group-hover:-translate-y-2 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                                </div>
+                                <h3 class="titre-massif text-4xl text-encre mb-4">Piton Maïdo</h3>
+                                <p class="text-encre/80 mb-8 font-medium text-lg">Idéal Raclette & Repas</p>
+                                <div class="text-encre font-bold flex items-center gap-2 mt-auto group-hover:gap-3 transition-all duration-300">Découvrir <i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="bg-creme rounded-2xl p-10 flex flex-col cursor-pointer group hover:bg-[#EFE4CC] hover-interactif">
+                                <span class="text-orprofond font-bold text-xs uppercase tracking-wider mb-8 block">Pâte molle • Doux</span>
+                                <div class="flex-grow flex items-center justify-center mb-10 relative pt-4">
+                                    <div class="absolute w-44 h-44 rounded-full bg-or group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);"></div>
+                                    <img src="assets/produit-piton-neiges.png" alt="Piton des Neiges" class="relative z-10 w-56 h-56 object-contain drop-shadow-xl group-hover:-translate-y-2 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                                </div>
+                                <h3 class="titre-massif text-4xl text-encre mb-4">Piton des Neiges</h3>
+                                <p class="text-encre/80 mb-8 font-medium text-lg">Cœur des hauts</p>
+                                <div class="text-encre font-bold flex items-center gap-2 mt-auto group-hover:gap-3 transition-all duration-300">Découvrir <i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                            </div>
+                            
+                            <!-- Card 3 -->
+                            <div class="bg-creme rounded-2xl p-10 flex flex-col cursor-pointer group hover:bg-[#EFE4CC] hover-interactif">
+                                <span class="text-orprofond font-bold text-xs uppercase tracking-wider mb-8 block">Frais • Doux</span>
+                                <div class="flex-grow flex items-center justify-center mb-10 relative pt-4">
+                                    <div class="absolute w-44 h-44 rounded-full bg-lagon group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);"></div>
+                                    <img src="assets/produit-tifrais.png" alt="Ti'Frais" class="relative z-10 w-56 h-56 object-contain drop-shadow-xl group-hover:-translate-y-2 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                                </div>
+                                <h3 class="titre-massif text-4xl text-encre mb-4">Ti'Frais</h3>
+                                <p class="text-encre/80 mb-8 font-medium text-lg">Idéal Apéritif & Tartine</p>
+                                <div class="text-encre font-bold flex items-center gap-2 mt-auto group-hover:gap-3 transition-all duration-300">Découvrir <i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                            </div>
+
+                            <div class="bg-brune rounded-2xl p-10 flex items-center justify-center cursor-pointer group hover:bg-or hover-interactif min-h-[400px]">
+                                <div class="text-encre group-hover:text-white transition-colors flex flex-col items-center">
+                                    <i data-lucide="plus" class="w-20 h-20 mb-6"></i>
+                                    <span class="font-bold text-xl uppercase tracking-widest">Voir plus</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE INSPIRATIONS -->
+        <section id="inspiration" class="page bg-lait">
+            <div class="relative w-full h-[70vh] bg-vertfonce overflow-hidden">
+                <img src="assets/inspiration-hero.jpg" alt="Inspirations recettes" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                <div class="absolute inset-0 hero-overlay"></div>
+                <div class="absolute inset-0 flex flex-col justify-end pb-20 px-4 md:px-10 lg:px-20 max-w-[1520px] mx-auto">
+                    <h1 class="titre-massif text-6xl md:text-[5.5rem] text-white mb-8">Nos inspirations</h1>
+                    <p class="accroche text-white/90 max-w-2xl text-xl">Les Fromages de La Réunion se dégustent aussi en cuisine. À l'apéritif, dans une recette généreuse ou simplement fondus sur une tranche de pain…</p>
+                </div>
+            </div>
+
+            <div class="py-20 lg:py-[120px] bg-creme">
+                <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20">
+                    <h2 class="titre-massif text-5xl text-encre mb-20 text-center">Selon l'occasion</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <div class="bg-lait p-10 lg:p-12 rounded-2xl flex flex-col h-full border border-brune/30 hover-interactif">
+                            <h3 class="titre-massif text-3xl text-encre mb-6">Pour l'apéritif</h3>
+                            <p class="texte-courant text-encre/80 flex-grow mb-10 text-lg">Pour l'apéritif, la gamme des Ti'Frais saura ravir vos convives !</p>
+                            <button class="bg-creme text-orprofond font-bold px-6 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-or hover:text-white transition-all duration-300 w-fit nav-link" data-target="fromages">
+                                Voir le Ti'Frais
+                            </button>
+                        </div>
+                        <div class="bg-lait p-10 lg:p-12 rounded-2xl flex flex-col h-full border border-brune/30 hover-interactif">
+                            <h3 class="titre-massif text-3xl text-encre mb-6">Pour une raclette</h3>
+                            <p class="texte-courant text-encre/80 flex-grow mb-10 text-lg">Pour une raclette réconfortante et conviviale, faites le choix du fromage Raclette ou Piton Maïdo.</p>
+                            <button class="bg-creme text-orprofond font-bold px-6 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-or hover:text-white transition-all duration-300 w-fit nav-link" data-target="fromages">
+                                Voir Piton Maïdo
+                            </button>
+                        </div>
+                        <div class="bg-lait p-10 lg:p-12 rounded-2xl flex flex-col h-full border border-brune/30 hover-interactif">
+                            <h3 class="titre-massif text-3xl text-encre mb-6">Repas en famille</h3>
+                            <p class="texte-courant text-encre/80 flex-grow mb-10 text-lg">Le Cœur des hauts Piton des Neiges est un fromage qui ravira les papilles des petits et des grands.</p>
+                            <button class="bg-creme text-orprofond font-bold px-6 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-or hover:text-white transition-all duration-300 w-fit nav-link" data-target="fromages">
+                                Voir Piton des Neiges
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="py-20 lg:py-[120px] max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20 bg-lait">
+                <h2 class="titre-massif text-5xl text-encre mb-20">Toutes nos recettes</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Recette 1 -->
+                    <div class="group cursor-pointer hover-interactif">
+                        <div class="rounded-2xl overflow-hidden mb-8 relative aspect-[4/3] bg-brune shadow-sm">
+                            <img src="assets/recette-salade.jpg" alt="Salade Ti'Frais" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                        </div>
+                        <span class="text-orprofond font-bold text-xs uppercase tracking-wider mb-4 block">Cuisine Péï</span>
+                        <h3 class="titre-massif text-3xl mb-6 text-encre">Salade Ti'Frais enrobé</h3>
+                        <p class="text-encre font-bold flex items-center gap-2 group-hover:gap-3 transition-all duration-300">Lire la recette <i data-lucide="arrow-right" class="w-5 h-5"></i></p>
+                    </div>
+                    <!-- Recette 2 -->
+                    <div class="group cursor-pointer hover-interactif">
+                        <div class="rounded-2xl overflow-hidden mb-8 relative aspect-[4/3] bg-creme shadow-sm">
+                            <img src="assets/recette-gratin.jpg" alt="Gratin de Citrouille" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                        </div>
+                        <span class="text-orprofond font-bold text-xs uppercase tracking-wider mb-4 block">Plat chaud</span>
+                        <h3 class="titre-massif text-3xl mb-6 text-encre">Gratin de Citrouille</h3>
+                        <p class="text-encre font-bold flex items-center gap-2 group-hover:gap-3 transition-all duration-300">Lire la recette <i data-lucide="arrow-right" class="w-5 h-5"></i></p>
+                    </div>
+                    <!-- Recette 3 -->
+                    <div class="group cursor-pointer hover-interactif">
+                        <div class="rounded-2xl overflow-hidden mb-8 relative aspect-[4/3] bg-vertfeuille shadow-sm">
+                            <img src="assets/recette-macatia.jpg" alt="Macatia au fromage" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style="transition-timing-function: var(--bezier-fluide);" onerror="this.style.display='none'">
+                        </div>
+                        <span class="text-orprofond font-bold text-xs uppercase tracking-wider mb-4 block">Snack</span>
+                        <h3 class="titre-massif text-3xl mb-6 text-encre">Macatia au fromage</h3>
+                        <p class="text-encre font-bold flex items-center gap-2 group-hover:gap-3 transition-all duration-300">Lire la recette <i data-lucide="arrow-right" class="w-5 h-5"></i></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE FAQ & CONTACT -->
+        <section id="contact" class="page py-20 lg:py-[120px] bg-lait">
+            <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20">
+                <h1 class="titre-massif text-6xl md:text-[5.5rem] text-encre mb-24 text-center">FAQ & Contact</h1>
+                <div class="grid md:grid-cols-2 gap-20">
+                    <div>
+                        <h2 class="titre-massif text-4xl mb-10 text-encre">Questions Fréquentes</h2>
+                        <div class="space-y-4">
+                            <details class="bg-creme p-8 rounded-2xl cursor-pointer group hover-interactif">
+                                <summary class="font-bold text-encre text-lg outline-none flex justify-between items-center">
+                                    Où trouver vos fromages ?
+                                    <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform duration-300" style="transition-timing-function: var(--bezier-fluide);"></i>
+                                </summary>
+                                <p class="mt-6 text-encre/80 font-medium">Nos fromages sont disponibles dans la majorité des grandes et moyennes surfaces de l'île de La Réunion.</p>
+                            </details>
+                            <details class="bg-creme p-8 rounded-2xl cursor-pointer group hover-interactif">
+                                <summary class="font-bold text-encre text-lg outline-none flex justify-between items-center">
+                                    Vos fromages sont-ils pasteurisés ?
+                                    <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform duration-300" style="transition-timing-function: var(--bezier-fluide);"></i>
+                                </summary>
+                                <p class="mt-6 text-encre/80 font-medium">Oui, tous nos fromages sont fabriqués à partir de lait pasteurisé collecté à La Réunion.</p>
+                            </details>
+                            <details class="bg-creme p-8 rounded-2xl cursor-pointer group hover-interactif">
+                                <summary class="font-bold text-encre text-lg outline-none flex justify-between items-center">
+                                    Comment conserver le Piton Maïdo ?
+                                    <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform duration-300" style="transition-timing-function: var(--bezier-fluide);"></i>
+                                </summary>
+                                <p class="mt-6 text-encre/80 font-medium">À conserver au réfrigérateur entre +4°C et +8°C. Sortez-le 30 minutes avant dégustation.</p>
+                            </details>
+                        </div>
+                    </div>
+
+                    <div class="bg-creme p-12 rounded-2xl hover-interactif">
+                        <h2 class="titre-massif text-4xl mb-10 text-encre">Nous écrire</h2>
+                        <form class="space-y-8">
+                            <div>
+                                <label class="block text-xs font-bold text-orprofond uppercase tracking-wider mb-3">Nom complet</label>
+                                <input type="text" class="w-full bg-lait border border-brune rounded-xl px-5 py-4 outline-none focus:border-or focus:ring-1 focus:ring-or transition-colors duration-300">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-orprofond uppercase tracking-wider mb-3">Email</label>
+                                <input type="email" class="w-full bg-lait border border-brune rounded-xl px-5 py-4 outline-none focus:border-or focus:ring-1 focus:ring-or transition-colors duration-300">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-orprofond uppercase tracking-wider mb-3">Message</label>
+                                <textarea rows="5" class="w-full bg-lait border border-brune rounded-xl px-5 py-4 outline-none focus:border-or focus:ring-1 focus:ring-or resize-none transition-colors duration-300"></textarea>
+                            </div>
+                            <button type="button" class="w-full bg-or text-white font-bold py-5 rounded-full text-lg hover:bg-orprofond mt-4 hover-interactif">
+                                Envoyer le message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ZONE TAMPON NEWSLETTER -->
+    <section class="bg-lait pt-20 lg:pt-[120px] pb-16 relative z-20">
+        <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20">
+            <div class="bg-creme rounded-2xl p-10 lg:p-16 shadow-newsletter flex flex-col md:flex-row items-center justify-between text-orprofond border border-brune/30">
+                <div class="md:w-5/12 mb-10 md:mb-0">
+                    <h3 class="titre-massif text-4xl mb-6">Les bonnes choses arrivent régulièrement</h3>
+                    <p class="texte-courant text-orprofond/80 text-lg">Des recettes, de nouveaux fromages à déguster, et des rendez-vous à ne pas manquer.</p>
+                </div>
+                
+                <div class="md:w-5/12 w-full relative mt-4 md:mt-0">
+                    <div class="relative w-full">
+                        <input type="email" placeholder="Saisir votre adresse mail" class="w-full bg-white px-8 py-5 rounded-full outline-none text-orprofond font-medium shadow-sm border border-brune/50 focus:border-or transition-colors duration-300 pr-20">
+                        <button class="absolute bg-or text-white w-16 h-16 rounded-full flex items-center justify-center hover:bg-orprofond shadow-btn-circulaire hover-interactif" style="bottom: 0; right: 0; transform: translate(25%, 25%);">
+                            <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MEGA FOOTER -->
+    <footer class="bg-lait relative pt-16 pb-10 border-t-8 border-creme">
+        <div class="absolute inset-0 pointer-events-none opacity-40 bg-cover bg-bottom bg-no-repeat" style="background-image: url('assets/decor-footer.png');"></div>
+        
+        <div class="max-w-[1520px] mx-auto px-4 md:px-10 lg:px-20 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-20 mt-8 mb-20">
+                
+                <div class="col-span-1 md:col-span-5 flex flex-col items-start">
+                    <div class="w-32 h-32 flex items-center justify-center mb-8 relative hover-interactif">
+                        <img src="assets/logo.png" alt="Logo Footer" class="w-full h-full object-contain" onerror="this.style.display='none'">
+                    </div>
+                    <p class="text-encre/70 font-medium leading-relaxed max-w-sm mb-10">
+                        Il y a près de 30 ans, Les Fromages de La Réunion sont nés d'une volonté simple : faire vivre une filière laitière locale et proposer des fromages qui trouvent naturellement leur place sur les tables réunionnaises.
+                    </p>
+                    
+                    <div class="flex items-center gap-6 opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="assets/partenaire-cilam.png" alt="CILAM" class="h-10 w-auto object-contain" onerror="this.style.display='none'">
+                        <img src="assets/partenaire-ue.png" alt="Union Européenne" class="h-10 w-auto object-contain" onerror="this.style.display='none'">
+                        <img src="assets/partenaire-region.png" alt="Région Réunion" class="h-10 w-auto object-contain" onerror="this.style.display='none'">
+                    </div>
+                </div>
+
+                <div class="col-span-1 md:col-span-7 flex flex-col sm:flex-row justify-between gap-10">
+                    <div class="pt-4">
+                        <ul class="space-y-6 text-encre font-bold text-lg">
+                            <li><a href="#" class="hover:text-or transition-colors duration-300 nav-link inline-block" data-target="accueil">Accueil</a></li>
+                            <li><a href="#" class="hover:text-or transition-colors duration-300 nav-link inline-block" data-target="savoir-faire">Nos savoir-faire</a></li>
+                            <li><a href="#" class="hover:text-or transition-colors duration-300 nav-link inline-block" data-target="fromages">Nos fromages</a></li>
+                            <li><a href="#" class="hover:text-or transition-colors duration-300 nav-link inline-block" data-target="inspiration">Nos inspirations</a></li>
+                            <li><a href="#" class="hover:text-or transition-colors duration-300 nav-link inline-block" data-target="contact">FAQ</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4 flex flex-col items-start sm:items-end">
+                        <a href="https://www.instagram.com/fromagesdelareunion/" target="_blank" rel="noopener noreferrer" class="bg-or text-white hover:bg-orprofond font-bold flex items-center gap-3 px-8 py-4 rounded-full hover-interactif">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                            Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-brune pt-10 flex flex-col md:flex-row justify-between items-center text-sm text-encre/60 font-medium">
+                <p>&copy; 2024 Les Fromages de La Réunion. Tous droits réservés.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-or transition-colors duration-300">Mentions légales</a>
+                    <a href="#" class="hover:text-or transition-colors duration-300">Politique de confidentialité</a>
+                    <a href="#" class="hover:text-or transition-colors duration-300">Gestion des cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            function navigateTo(targetId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+
+                const targetPage = document.getElementById(targetId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if(!e.target.closest('a[target="_blank"]')) {
+                        e.preventDefault();
+                        const targetLink = e.target.closest('.nav-link');
+                        if(targetLink) {
+                            const targetId = targetLink.getAttribute('data-target');
+                            navigateTo(targetId);
+                        }
+                    }
+                });
+            });
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('shadow-header-scroll');
+                } else {
+                    header.classList.remove('shadow-header-scroll');
+                }
+            });
+
+            // --- EFFET PARALLAX FLUIDE (GPU) ---
+            const parallaxImages = document.querySelectorAll('[data-parallax]');
+
+            window.addEventListener('scroll', () => {
+                requestAnimationFrame(() => {
+                    parallaxImages.forEach(img => {
+                        const parent = img.parentElement;
+                        const rect = parent.getBoundingClientRect();
+                        const windowHeight = window.innerHeight;
+
+                        if (rect.top <= windowHeight && rect.bottom >= 0) {
+                            const elementCenter = rect.top + (rect.height / 2);
+                            const windowCenter = windowHeight / 2;
+                            const speed = 0.15;
+                            const offset = (elementCenter - windowCenter) * speed;
+                            img.style.transform = `translate3d(0, ${offset}px, 0)`;
+                        }
+                    });
+                });
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>
